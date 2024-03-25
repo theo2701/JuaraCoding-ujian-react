@@ -1,58 +1,51 @@
 import React, { useState } from 'react';
-import DownloadPage from './downloadPage';
+import { Container, Form, Button, Alert } from 'react-bootstrap';
+import { useNavigate, useRoutes } from 'react-router-dom';
 
 const LoginPage = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    handleLogin(username, password);
-  };
-
-  const handleLogin = (username, password) => {
-    if (username === 'Theodorus' && password === 'aduh') {
-      setIsLoggedIn(true);
+  const handleLogin = () => {
+    if (username === 'theodorus' && password === 'aduh') {
+      console.log('Login berhasil');
+      navigate('/catalog');
     } else {
-      alert('Login failed. Please try again.');
+      setError('Username atau password salah');
     }
   };
 
   return (
-    <React.Fragment>
-        {
-            isLoggedIn ? (
-                <DownloadPage username={username} password={password}/>
-            ):(
-                <div>
-      <h2>Login Page</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Username:</label>
-          <input
+    <Container>
+      <h1 className="mt-4">Login</h1>
+      {error && <Alert variant="danger">{error}</Alert>}
+      <Form className="mt-4">
+        <Form.Group controlId="formUsername">
+          <Form.Label>Username</Form.Label>
+          <Form.Control
             type="text"
+            placeholder="Enter username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            required
           />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
+        </Form.Group>
+        <Form.Group controlId="formPassword">
+          <Form.Label>Password</Form.Label>
+          <Form.Control
             type="password"
+            placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
           />
-        </div>
-        <button type="submit">Login</button>
-      </form>
-    </div>
-            )
-        }
-    </React.Fragment>
+        </Form.Group>
+        <Button variant="primary" onClick={handleLogin}>
+          Login
+        </Button>
+      </Form>
+    </Container>
   );
 };
 
-export default LoginPage
+export default LoginPage;
