@@ -1,19 +1,32 @@
-import React, { useState } from 'react';
-import { Container, Form, Button, Alert } from 'react-bootstrap';
-import { useNavigate, useRoutes } from 'react-router-dom';
+import React, { useState } from "react";
+import { Container, Form, Button, Alert } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const handleLogin = () => {
-    if (username === 'theodorus' && password === 'aduh') {
-      console.log('Login berhasil');
-      navigate('/catalog');
-    } else {
-      setError('Username atau password salah');
+  const handleLogin = async () => {
+    try {
+      const response = await fetch("https://fakestoreapi.com/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (response.ok) {
+        console.log("Login berhasil");
+        navigate("/catalog");
+      } else {
+        setError("Username atau password salah");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setError("Terjadi kesalahan. Silakan coba lagi.");
     }
   };
 
